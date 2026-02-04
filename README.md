@@ -7,8 +7,8 @@
   <p>
     <a href="#-核心特性">核心特性</a> •
     <a href="#-快速开始">快速开始</a> •
-    <a href="#-发展规划">发展规划</a> •
-    <a href="#-配置指南">配置指南</a>
+    <a href="#-配置指南">配置指南</a> •
+    <a href="#-技术栈">技术栈</a>
   </p>
 
   <p>
@@ -21,7 +21,7 @@
 
 ---
 
-Hoshino 是一款专为动漫爱好者设计的智能媒体库整理工具。它结合了传统规则引擎与现代大语言模型 (LLM)，能够精准识别复杂的动漫文件名，并自动将其整理为规范的媒体库结构。
+Hoshino 是一款专为动漫爱好者设计的智能媒体库整理工具。它结合了传统规则引擎与现代大语言模型 (LLM)，能够精准识别复杂的动漫文件名，并自动将其整理为规范的媒体库结构，让您的 Plex/Emby/Jellyfin 媒体库井井有条。
 
 ## ✨ 核心特性
 
@@ -29,139 +29,148 @@ Hoshino 是一款专为动漫爱好者设计的智能媒体库整理工具。它
   <table>
     <tr>
       <td align="center" width="33%">
-        <h3>🧠 LLM 驱动</h3>
-        <p>自研规则引擎 + AI 智能分析<br>精准识别各类复杂命名</p>
+        <h3>🧠 双引擎识别</h3>
+        <p>规则引擎 + LLM 大模型<br>精准理解字幕组复杂命名</p>
       </td>
       <td align="center" width="33%">
-        <h3>🎬 自动刮削</h3>
-        <p>TMDB 深度集成<br>自动获取本地化元数据与海报</p>
+        <h3>🔄 自动追番</h3>
+        <p>Mikan RSS 深度集成<br>自动订阅、下载、整理</p>
       </td>
       <td align="center" width="33%">
-        <h3>⚡ 极速体验</h3>
-        <p>Ether Design 设计语言<br>现代化流体交互与深色模式</p>
+        <h3>🎨 现代化 UI</h3>
+        <p>Ether Design 设计语言<br>流体交互与深色模式</p>
       </td>
     </tr>
   </table>
 </div>
 
-### 🎯 智能识别与整理
+### 场景化功能介绍
 
-- **双引擎驱动**：同时利用规则引擎的速度和 LLM 的理解能力。
-  - 支持标准字幕组格式：`[字幕组][作品名][集数][标签]`
-  - 理解语义化季度标识（如「完」、「续」、「Kan」、「Zoku」）
-  - 智能推断季度和集数范围
-- **标准化整理**：按照 `首字母/标题/Season XX/标题 - SXXEXX.ext` 结构自动重命名和移动。
+- **"把番剧丢进去就行"**：无论文件名是 `[字幕组][新番][01][1080P]` 还是复杂的 `[S1][完][BDRip]`，Hoshino 都能自动识别作品名、季度和集数，并移动到标准目录结构中。
+- **"下载即归档"**：深度集成 qBittorrent，下载完成瞬间触发整理，无需人工干预。
+- **"不仅是整理"**：内置 TMDB 刮削，自动下载精美海报、背景图、演职人员信息，让您的媒体库赏心悦目。
+- **"随时掌控"**：提供功能完整的 Web 管理界面，支持手动修正识别结果、查看下载进度、管理订阅任务。
 
-### 📥 全流程下载管理
-
-- **多源支持**：支持磁力链接和种子文件 (.torrent) 上传。
-- **自动闭环**：
-  - **订阅自动化**：集成 Mikan (蜜柑计划) RSS，自动追番下载。
-  - **智能归档**：下载完成后自动触发整理任务，实现"下载即归档"。
-- **实时监控**：
-  - 在 Web 界面直接管理 qBittorrent 任务。
-  - 实时查看下载进度、速度和任务状态。
-
-### 🛡️ 安全可靠
-
-- **任务预览**：执行前预览所有文件名变更，确认无误后再执行。
-- **重命名回滚**：支持一键撤销已执行的整理操作。
-- **智能去重**：自动检测重复任务，避免覆盖。
-
-## 🛠️ 技术栈
-
-| 领域         | 技术选型            | 说明                       |
-| :----------- | :------------------ | :------------------------- |
-| **后端**     | FastAPI             | 高性能异步 Python Web 框架 |
-| **数据库**   | SQLite + SQLAlchemy | 轻量级持久化存储           |
-| **任务队列** | Huey                | 简单强大的分布式任务队列   |
-| **前端**     | Vue 3 + Vite        | 现代化渐进式前端框架       |
-| **UI 框架**  | TailwindCSS         | 实用优先的 CSS 框架        |
-| **API 集成** | qBittorrent, TMDB   | 深度集成的第三方服务       |
+---
 
 ## 🚀 快速开始
 
-### 方式一：使用 Docker 部署 (推荐)
+### 1. 准备工作 (API Keys)
 
-如果您安装了 Docker 和 Docker Compose，可以使用以下命令一键启动：
+在开始部署之前，您需要准备以下 API Key 以启用核心功能：
+
+<details open>
+<summary><strong>🔑 必填配置 (点击收起)</strong></summary>
+
+| 服务            | 用途             | 获取方式                                                                                                                |
+| :-------------- | :--------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| **LLM API**     | 智能识别文件名   | 推荐 **OpenAI** ([获取](https://platform.openai.com/api-keys)) 或 **DeepSeek** ([获取](https://platform.deepseek.com/)) |
+| **TMDB API**    | 获取海报与元数据 | 注册 [TMDB](https://www.themoviedb.org/) -> [API 设置](https://www.themoviedb.org/settings/api)                         |
+| **qBittorrent** | 下载与任务管理   | 需在本地或服务器安装 qBittorrent 并开启 Web UI                                                                          |
+
+</details>
+
+### 2. 获取代码与初始化
 
 ```bash
+# 1. 克隆项目
+git clone https://github.com/YiGuMoYan/Hoshino.git
+cd Hoshino
+
+# 2. 准备配置文件
+cp .env.example .env
+```
+
+### 3. 环境配置 (至关重要)
+
+编辑 `.env` 文件，填入您的配置信息：
+
+```ini
+# --- 基础设置 ---
+APP_NAME=Hoshino
+# 数据库存储路径 (确保目录存在或 Docker 挂载)
+SQLITE_URL=sqlite:///./data/hoshino.db
+
+# --- 核心功能 (必须配置) ---
+# 推荐使用 DeepSeek (性价比高) 或 OpenAI
+OPENAI_API_KEY=sk-xxxxxx
+OPENAI_BASE_URL=https://api.deepseek.com/v1
+OPENAI_MODEL=deepseek-chat
+
+# TMDB (元数据刮削)
+TMDB_API_KEY=xxxxxx
+
+# --- 下载器设置 ---
+QB_HOST=http://localhost:8080
+QB_USERNAME=admin
+QB_PASSWORD=adminadmin
+# 这里的路径是 qBittorrent 下载文件的保存路径
+DOWNLOAD_PATH=/path/to/downloads
+```
+
+### 4. 启动服务
+
+#### 方式 A：Docker 部署 (推荐)
+
+```bash
+# 启动所有服务 (后端 + 数据库 + Worker)
 docker-compose up -d
 ```
 
-启动后访问 `http://localhost:8000`。
+访问 `http://localhost:8000` 即可开始使用。
 
-> [!TIP]
-> 默认会挂载当前目录下的 `data` 文件夹存储数据库，您可以修改 `docker-compose.yml` 来挂载您的实际媒体库目录。
+> **注意**：修改 `docker-compose.yml` 中的 volumes 映射，确保 Hoshino 能访问到您的媒体库文件夹。
 
-### 方式二：手动安装
+#### 方式 B：源码运行
 
-#### 1. 克隆项目
-
-```bash
-git clone https://github.com/YiGuMoYan/Hoshino.git
-cd Hoshino
-```
-
-#### 2. 环境配置
-
-**后端环境**:
+**后端准备**:
 
 ```bash
-# 推荐使用 Conda 或 venv
+# 创建虚拟环境
 conda create -n hoshino python=3.10
 conda activate hoshino
 pip install -r requirements.txt
+
+# 初始化数据库
+python init_db.py
 ```
 
-**前端环境**:
+**前端准备**:
 
 ```bash
 cd web
 npm install
 npm run build
+cd ..
 ```
 
-#### 3. 运行服务
-
-**生产模式**（推荐）：
+**启动**:
 
 ```bash
-# 1. 启动后端 API
+# 终端 1: 启动 API 服务
 python -m app.main
 
-# 2. 启动任务 Worker（新终端）
+# 终端 2: 启动任务 Worker
 python run_worker.py
 ```
 
-访问 `http://localhost:8000`。
+---
 
-## ⚙️ 配置指南
+## 🛠️ 技术栈
 
-为了获得最佳体验，请在首次启动后进入"系统设置"完成以下配置：
+| 领域         | 技术                 | 说明                     |
+| :----------- | :------------------- | :----------------------- |
+| **后端**     | FastAPI              | 高性能异步框架           |
+| **数据库**   | SQLite + SQLAlchemy  | 轻量可靠的存储方案       |
+| **任务队列** | Huey                 | 简单强大的分布式任务处理 |
+| **前端**     | Vue 3 + Vite         | 现代化响应式界面         |
+| **UI**       | TailwindCSS + Shadcn | 极简美学设计             |
 
-1.  **大模型 (LLM)**：配置 OpenAI 或兼容的 API Key (如阿里云 DashScope, DeepSeek)。这是智能识别的核心。
-2.  **TMDB**：配置 TMDB API Key 以获取精美的海报和元数据。
-3.  **下载器**：配置 qBittorrent 的 Web UI 地址和账号密码。
-4.  **应用设置**：设置媒体库的目标存储路径。
+## 🗺️ 发展规划
 
-## 🗺️ 发展规划 (Roadmap)
-
-### ✅ 已完成
-
-- [x] **v0.2 下载与整理联动**：qBittorrent 集成、日志系统、种子上传
-- [x] **v0.3 订阅自动化**：Mikan RSS 接入、自动追番、定时整理
-- [x] **v0.5 体验优化**：深色模式、完整任务闭环、回滚功能
-
-### � 进行中
-
-- [ ] **v1.0 移动端适配**：优化手机和平板访问体验
-- [ ] **v1.0 多端通知**：企业微信 / 飞书 / 邮箱推送
-
-### 🌟 未来愿景
-
-- [ ] **合集归档支持**：智能识别并归档整季合集 (Batch)
-- [ ] **全版本聚合**：一键检索并补全所有季度和剧场版资源
+- [x] **v0.5 基础版**：LLM 识别、qBittorrent 联动、基础刮削
+- [ ] **v0.8 进阶版**：多用户支持、WebHoook 通知 (企业微信/FCM)
+- [ ] **v1.0 正式版**：移动端 App 适配、插件系统
 
 ## 📄 开源协议
 
@@ -169,13 +178,12 @@ python run_worker.py
 
 ## 🙏 致谢
 
-- [TMDB](https://www.themoviedb.org/) - 提供丰富的元数据
-- [qBittorrent](https://www.qbittorrent.org/) - 优秀的开源下载器
-- [Mikanani](https://mikanani.me/) - 优质的动漫 RSS 索引
+- [TMDB](https://www.themoviedb.org/) - 元数据支持
+- [qBittorrent](https://www.qbittorrent.org/) - 下载器支持
+- [Mikanani](https://mikanani.me/) - 番剧索引支持
 
 ---
 
 <div align="center">
   <p>Designed with ❤️ for Anime Lovers.</p>
-  <p><strong>如果觉得好用，请给个 Star ⭐ 支持一下！</strong></p>
 </div>
