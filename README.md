@@ -57,76 +57,36 @@ Hoshino 是一款专为动漫爱好者设计的智能媒体库整理工具。它
 
 ### 1. 准备工作 (API Keys)
 
-在开始部署之前，您需要准备以下 API Key 以启用核心功能：
+在开始部署之前，建议准备以下 API Key 以获得最佳体验 (可在系统设置中填写)：
 
-<details open>
-<summary><strong>🔑 必填配置 (点击收起)</strong></summary>
+<details>
+<summary><strong>🔑 推荐配置 (点击展开)</strong></summary>
 
-| 服务            | 用途             | 获取方式                                                                                                                |
-| :-------------- | :--------------- | :---------------------------------------------------------------------------------------------------------------------- |
-| **LLM API**     | 智能识别文件名   | 推荐 **OpenAI** ([获取](https://platform.openai.com/api-keys)) 或 **DeepSeek** ([获取](https://platform.deepseek.com/)) |
-| **TMDB API**    | 获取海报与元数据 | 注册 [TMDB](https://www.themoviedb.org/) -> [API 设置](https://www.themoviedb.org/settings/api)                         |
-| **qBittorrent** | 下载与任务管理   | 需在本地或服务器安装 qBittorrent 并开启 Web UI                                                                          |
+| 服务         | 用途             | 获取方式                                                                                                                |
+| :----------- | :--------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| **LLM API**  | 智能识别文件名   | 推荐 **OpenAI** ([获取](https://platform.openai.com/api-keys)) 或 **DeepSeek** ([获取](https://platform.deepseek.com/)) |
+| **TMDB API** | 获取海报与元数据 | 注册 [TMDB](https://www.themoviedb.org/) -> [API 设置](https://www.themoviedb.org/settings/api)                         |
 
 </details>
 
-### 2. 获取代码与初始化
-
-```bash
-# 1. 克隆项目
-git clone https://github.com/YiGuMoYan/Hoshino.git
-cd Hoshino
-
-# 2. 准备配置文件
-cp .env.example .env
-```
-
-### 3. 环境配置 (至关重要)
-
-编辑 `.env` 文件，填入您的配置信息：
-
-```ini
-# --- 基础设置 ---
-APP_NAME=Hoshino
-# 数据库存储路径 (确保目录存在或 Docker 挂载)
-SQLITE_URL=sqlite:///./data/hoshino.db
-
-# --- 核心功能 (必须配置) ---
-# 推荐使用 DeepSeek (性价比高) 或 OpenAI
-OPENAI_API_KEY=sk-xxxxxx
-OPENAI_BASE_URL=https://api.deepseek.com/v1
-OPENAI_MODEL=deepseek-chat
-
-# TMDB (元数据刮削)
-TMDB_API_KEY=xxxxxx
-
-# --- 下载器设置 ---
-QB_HOST=http://localhost:8080
-QB_USERNAME=admin
-QB_PASSWORD=adminadmin
-# 这里的路径是 qBittorrent 下载文件的保存路径
-DOWNLOAD_PATH=/path/to/downloads
-```
-
-### 4. 启动服务
+### 2. 环境配置与启动
 
 #### 方式 A：Docker 部署 (推荐)
 
+直接使用 Docker Compose 启动：
+
 ```bash
-# 启动所有服务 (后端 + 数据库 + Worker)
 docker-compose up -d
 ```
 
-访问 `http://localhost:8000` 即可开始使用。
+> **注意**：默认数据存储在 `./data` 目录。请确保 `docker-compose.yml` 中的卷挂载指向您实际的媒体库和下载目录。
 
-> **注意**：修改 `docker-compose.yml` 中的 volumes 映射，确保 Hoshino 能访问到您的媒体库文件夹。
+#### 方式 B：源码手动安装
 
-#### 方式 B：源码运行
-
-**后端准备**:
+**后端环境**:
 
 ```bash
-# 创建虚拟环境
+# 推荐使用 Conda 或 venv
 conda create -n hoshino python=3.10
 conda activate hoshino
 pip install -r requirements.txt
@@ -135,24 +95,34 @@ pip install -r requirements.txt
 python init_db.py
 ```
 
-**前端准备**:
+**前端环境**:
 
 ```bash
 cd web
 npm install
 npm run build
-cd ..
 ```
 
-**启动**:
+**启动服务**:
 
 ```bash
-# 终端 1: 启动 API 服务
+# 终端 1: 启动后端 API
 python -m app.main
 
 # 终端 2: 启动任务 Worker
 python run_worker.py
 ```
+
+### 3. 系统配置 (Web UI)
+
+启动后访问 `http://localhost:8000` 进入管理界面。
+
+请点击左侧菜单底部的 **"系统设置" (System Settings)** 完成配置：
+
+1.  **大模型配置**：填入您的 API Key 和 Base URL (支持 OpenAI 格式的各种模型)。
+2.  **TMDB 配置**：填入 API Key 以启用封面刮削。
+3.  **下载器配置**：配置 qBittorrent 的地址和账号密码，实现自动下载。
+4.  **应用设置**：指定媒体库整理的目标路径。
 
 ---
 
@@ -165,12 +135,6 @@ python run_worker.py
 | **任务队列** | Huey                 | 简单强大的分布式任务处理 |
 | **前端**     | Vue 3 + Vite         | 现代化响应式界面         |
 | **UI**       | TailwindCSS + Shadcn | 极简美学设计             |
-
-## 🗺️ 发展规划
-
-- [x] **v0.5 基础版**：LLM 识别、qBittorrent 联动、基础刮削
-- [ ] **v0.8 进阶版**：多用户支持、WebHoook 通知 (企业微信/FCM)
-- [ ] **v1.0 正式版**：移动端 App 适配、插件系统
 
 ## 📄 开源协议
 
