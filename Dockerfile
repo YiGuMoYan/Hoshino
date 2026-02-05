@@ -59,7 +59,9 @@ COPY --from=python-builder /opt/venv /opt/venv
 COPY --from=frontend-builder /web/dist ./web/dist
 
 # Copy application code
-COPY . .
+COPY app ./app
+COPY init_db.py .
+COPY run_worker.py .
 
 # Create data directory
 RUN mkdir -p /app/data

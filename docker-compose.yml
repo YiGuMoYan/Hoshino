@@ -5,12 +5,10 @@ services:
     build: .
     container_name: hoshino
     ports:
-      - "8000:8000"
+      - "8712:8000"
     volumes:
       - ./data:/app/data # Persistent Data (DBs)
       - ./media:/media # Media library source
-
-      - ./app:/app/app # Live code (Hot reload)
     environment:
       - TZ=Asia/Shanghai
       - HOSHINO_DATA_DIR=/app/data
