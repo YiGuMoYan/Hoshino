@@ -67,7 +67,7 @@ COPY run_worker.py .
 RUN mkdir -p /app/data
 
 # Expose API port
-EXPOSE 8000
+EXPOSE 8712
 
 # Setup entrypoint
 COPY entrypoint.sh /entrypoint.sh
